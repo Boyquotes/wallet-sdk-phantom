@@ -1,3 +1,6 @@
+# owner: age
+# slack: #agentic-trading
+
 name: Release
 
 on:
@@ -5,37 +8,61 @@ on:
     branches:
       - main
 
+permissions: {}
+
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
   release:
-    name: Release
+    name: Publish to npm
     runs-on: ubuntu-latest
+    # Only run in the repository that publishes packages.
+    if: github.repository == 'phantom/phantom-connect-sdk'
+    environment: ci
     permissions:
       contents: write
       pull-requests: write
+      # OIDC for npm provenance
+      id-token: write
+      actions: write
+    env:
+      NPM_CONFIG_PROVENANCE: true
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v3
-
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          # changesets publish uses commitMode: git-cli; credentials must persist for push (zizmor artipacked: explicit opt-in).
+          persist-credentials: true
+            
+      # Self-hosted / locked-down images may not allow symlinks under /usr/bin (default corepack enable).
       - name: Enable Corepack
-        run: corepack enable
+        run: |
+          COREPACK_BIN="${RUNNER_TEMP}/corepack-bin"
+          mkdir -p "${COREPACK_BIN}"
+          corepack enable yarn --install-directory "${COREPACK_BIN}"
+          echo "${COREPACK_BIN}" >> "${GITHUB_PATH}"
 
       - name: Setup Node.js 20.x
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 20.x
+          cache: "yarn"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Ensure npm 11.5.1+ for trusted publishing
+        run: npm install -g npm@^11.5.1
 
       - name: Install Dependencies
-        run: yarn
+        run: yarn install --immutable
 
-      - name: Create Release Pull Request or Publish to npm
+      - name: Build
+        run: yarn build
+
+      - name: Publish to npm
         id: changesets
-        uses: changesets/action@v1
+        uses: changesets/action@e0145edc7d9d8679003495b11f87bd8ef63c0cba
         with:
-          # This expects you to have a script called release which does a build for your packages and calls changeset publish
-          version: yarn changeset version
           publish: yarn release
+          commitMode: git-cli
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN_PHANTOM_SECURITY_BOT }}

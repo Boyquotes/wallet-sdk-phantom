@@ -1,0 +1,39 @@
+{
+  "name": "@phantom/mcp-server",
+  "version": "1.2.9",
+  "description": "MCP Server for Phantom Wallet",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/phantom/phantom-connect-sdk",
+    "directory": "packages/mcp-server"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "phantom-mcp": "./dist/bin.js"
+  },
+  "scripts": {
+    "?pack-release": "When https://github.com/changesets/changesets/issues/432 has a solution we can remove this trick",
+    "pack-release": "rimraf ./_release && yarn pack && mkdir ./_release && tar zxvf ./package.tgz --directory ./_release && rm ./package.tgz",
+    "build": "rimraf ./dist && tsup",
+    "dev": "tsup --watch",
+    "clean": "rm -rf dist",
+    "test:auth": "node scripts/test-auth.js",
+    "test:pack": "node scripts/test-pack.mjs",
+    "test:smoke": "node scripts/test-smoke.mjs",
+    "check-types": "yarn tsc --noEmit",
+    "pack:desktop": "yarn build && mcpb pack"
+  },
+  "dependencies": {
+    "@phantom/cli": "workspace:^"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "rimraf": "^6.0.1",
+    "tsup": "^6.7.0",
+    "typescript": "^5.0.4"
+  },
+  "publishConfig": {
+    "directory": "_release/package"
+  }
+}

@@ -1,0 +1,13 @@
+# General
+.yarn/
+dist/
+node_modules/
+.changeset/
+.github/
+.wrangler/
+
+# Builds
+**/.next/
+**/build/
+
+examples/with-nextjs/tsconfig.json

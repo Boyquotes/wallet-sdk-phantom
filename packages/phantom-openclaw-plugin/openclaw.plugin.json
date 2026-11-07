@@ -1,0 +1,91 @@
+{
+  "id": "phantom-openclaw-plugin",
+  "name": "Phantom Embedded Wallet",
+  "description": "Phantom Embedded Wallet — sign transactions, transfer tokens, and swap on Solana and Ethereum. Powered by Phantom.",
+  "skills": ["./skills"],
+  "configSchema": {
+    "type": "object",
+    "properties": {
+      "PHANTOM_AUTH_BASE_URL": {
+        "type": "string",
+        "minLength": 1
+      },
+      "PHANTOM_CONNECT_BASE_URL": {
+        "type": "string",
+        "minLength": 1
+      },
+      "PHANTOM_WALLETS_API_BASE_URL": {
+        "type": "string",
+        "minLength": 1
+      },
+      "PHANTOM_API_BASE_URL": {
+        "type": "string",
+        "minLength": 1
+      },
+      "PHANTOM_VERSION": {
+        "type": "string",
+        "minLength": 1
+      },
+      "PHANTOM_CALLBACK_PORT": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 65535
+      },
+      "PHANTOM_CALLBACK_PATH": {
+        "type": "string",
+        "minLength": 1
+      },
+      "PHANTOM_MCP_DEBUG": {
+        "type": "string",
+        "minLength": 1
+      },
+      "PHANTOM_APP_ID": {
+        "type": "string",
+        "minLength": 1
+      },
+      "PHANTOM_CLIENT_ID": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "additionalProperties": false
+  },
+  "uiHints": {
+    "PHANTOM_AUTH_BASE_URL": {
+      "label": "Auth Base URL",
+      "placeholder": "https://auth.phantom.app"
+    },
+    "PHANTOM_CONNECT_BASE_URL": {
+      "label": "Connect Base URL",
+      "placeholder": "https://connect.phantom.app"
+    },
+    "PHANTOM_WALLETS_API_BASE_URL": {
+      "label": "Wallets API Base URL",
+      "placeholder": "https://api.phantom.app/v1/wallets"
+    },
+    "PHANTOM_API_BASE_URL": {
+      "label": "API Base URL",
+      "placeholder": "https://api.phantom.app"
+    },
+    "PHANTOM_CALLBACK_PORT": {
+      "label": "Callback Port",
+      "placeholder": "8080"
+    },
+    "PHANTOM_VERSION": {
+      "label": "Version Header",
+      "placeholder": "mcp-server"
+    },
+    "PHANTOM_MCP_DEBUG": {
+      "label": "Enable Debug Logging",
+      "placeholder": "1"
+    },
+    "PHANTOM_APP_ID": {
+      "label": "App ID",
+      "placeholder": "your-app-id"
+    },
+    "PHANTOM_CLIENT_ID": {
+      "label": "Client ID",
+      "placeholder": "your-client-id"
+    }
+  }
+}
